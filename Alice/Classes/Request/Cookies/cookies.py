@@ -1,5 +1,6 @@
-from flask import make_response
-from ErrorInterface.interface import ErrorInterface as Error
+from flask import make_response, Response
+# import flask.Response as Response
+from ...ErrorInterface.interface import ErrorInterface as Error
 
 class Cookies:
     
@@ -15,12 +16,14 @@ class Cookies:
         except TypeError:
             Error.resolve(self.error_identifier, label, Error.type, "key")
         except:
-            Error.resolve(self.error_identifier, label, "", "key")
+            Error.resolve(self.error_identifier, label)
     
-    def make(self, key: str, value):
+    def make(self, key: str, value) -> Response:
         label = "MAKE"
         res = make_response("Cookie")
         try:
+            if isinstance(value, int):
+                value = str(value)
             if isinstance(key, str): 
                 res.set_cookie(key, value)
                 return res
@@ -39,5 +42,5 @@ class Cookies:
         except TypeError:
             Error.resolve(self.error_identifier, label, Error.type, "key")
         except:
-            Error.resolve(self.error_identifier, label, "", "key")
+            Error.resolve(self.error_identifier, label)
             

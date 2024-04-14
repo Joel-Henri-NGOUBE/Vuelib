@@ -12,7 +12,7 @@ class ErrorInterface:
         """
             Méthode de classe d'identification d'erreur
         """
-        label = "RESOLVE"
+        labelResolve = "RESOLVE"
         try:
             if isinstance(identifier, str) and isinstance(label, str) and isinstance(message, str) and isinstance(variable, str):    
                 if variable:
@@ -20,7 +20,7 @@ class ErrorInterface:
                 print(f"{identifier} {label} - {cls._get_error(message, variable)}")
             else: raise TypeError
         except TypeError:
-            cls.resolve(cls.class_error_identifier, label, cls.type)
+            cls.resolve(cls.class_error_identifier, labelResolve, cls.type)
     
     def _get_error(message, variable):
         match message:
