@@ -1,4 +1,5 @@
 import mariadb
+from ..ErrorInterface.interface import ErrorInterface as Error
 
 config = {
     "host": "127.0.0.1",
@@ -13,6 +14,7 @@ class Database:
     def __init__(self):       
         self.connexion = mariadb.connect(**config)
         self.curseur = self.connexion.cursor()
+        self.error_identifier = "[ERREUR - CLASSE_DATABASE]:"
     
     def _close_connection(self):
         """
@@ -27,59 +29,46 @@ class Database:
         
     def select(self, sql_request: str, params: tuple|None = None):
         """
-            Select must be used to retrieve some data from the database.
-            
-            Parameters
-            ----------                      
-            sql_request : str
-                This is a string    
+            Select must be used to retrieve some data from the database.    
         """
-        self._check_params(sql_request, params)
-        return self.curseur.fetchall()
+        label = "SELECT"
+        try:
+            self._check_params(sql_request, params)
+            return self.curseur.fetchall()
+        except: Error.resolve(self.error_identifier, label)
+            
     
     def select_and_close(self, sql_request: str, params: tuple|None = None):
         """
-            Select must be used to retrieve some data from the database and closes the connexion to it.
-            
-            Parameters
-            ----------                      
-            sql_request : str
-                This is a string    
+            Select must be used to retrieve some data from the database and closes the connexion to it.   
         """
-        self._check_params(sql_request, params)
-        result = self.curseur.fetchall()
-        self._close_connection()
-        return result
+        label = "SELECT_AND_CLOSE"
+        try:
+            self._check_params(sql_request, params)
+            result = self.curseur.fetchall()
+            self._close_connection()
+            return result
+        except: Error.resolve(self.error_identifier, label)
     
     def mutate(self, sql_request: str, params: tuple|None = None):
         """
-            Mutate must be used to do operations such as updations, insertions or deletions on the database.
-            
-            Parameters
-            ----------                      
-            sql_request : str
-                This is a string
-                
-            params : int
-                This is a tuple        
+            Mutate must be used to do operations such as updations, insertions or deletions on the database.       
         """
-        self._check_params(sql_request, params) 
-        self.connexion.commit()
+        label = "MUTATE"
+        try:
+            self._check_params(sql_request, params) 
+            self.connexion.commit()
+        except: Error.resolve(self.error_identifier, label)
         
     def mutate_and_close(self, sql_request: str, params: tuple|None = None):
         """
-            Mutate must be used to do operations such as updations, insertions or deletions on the database and closes the connexion to it.
-            
-            Parameters
-            ----------                      
-            sql_request : str
-                This is a string
-                
-            params : int
-                This is a tuple        
+            Mutate must be used to do operations such as updations, insertions or deletions on the database and closes the connexion to it.     
         """
-        self.mutate(sql_request, params)
-        self._close_connection()
+        label = "MUTATE_AND_CLOSE"
+        try:
+            self.mutate(sql_request, params)
+            self._close_connection()
+        except: Error.resolve(self.error_identifier, label)
 
 
 

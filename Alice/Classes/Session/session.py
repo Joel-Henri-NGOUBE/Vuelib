@@ -1,4 +1,5 @@
 from flask import session
+from ..ErrorInterface.interface import ErrorInterface as Error
 
 class Session:
     
@@ -10,20 +11,23 @@ class Session:
     def get(self, key: str):
         label = "GET"
         try:
-            return self.session[key]
+            if isinstance(key, str): return self.session[key]
+            else: raise TypeError
         except TypeError:
-            print(f"{self._error_identifier} {label} -  Paramètre 'key' de mauvais type")
+            Error.resolve(self._error_identifier, label, Error.type, 'key')
         except KeyError:
-            print(f"{self._error_identifier} {label} -  Paramètre 'key' introuvable dans la session")
+            Error.resolve(self._error_identifier, label, Error.key, 'key')
         
     def set(self, key: str, value):
         label = "SET"
         try:
-            self.session[key] = value
+            if isinstance(key, str):  self.session[key] = value
+            else: raise TypeError
         except TypeError:
-            print(f"{self._error_identifier} {label} -  Paramètre 'key' de mauvais type")
+            Error.resolve(self._error_identifier, label, Error.type, 'key')
+        # Techniquement inatteignable
         except KeyError:
-            print(f"{self._error_identifier} {label} -  Paramètre 'key' introuvable dans la session")
+            Error.resolve(self._error_identifier, label, Error.key, 'key')
             
     def pop(self, key: str):
         label = "POP"
@@ -31,9 +35,9 @@ class Session:
             if isinstance(key, str): self.session.pop(key, None)
             else: raise TypeError
         except TypeError:
-            print(f"{self._error_identifier} {label} -  Paramètre 'key' de mauvais type")
+            Error.resolve(self._error_identifier, label, Error.type, 'key')
         except KeyError:
-            print(f"{self._error_identifier} {label} -  Paramètre 'key' introuvable dans la session")
+            Error.resolve(self._error_identifier, label, Error.key, 'key')
 
 
 
