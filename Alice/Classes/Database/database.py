@@ -1,5 +1,5 @@
 import mariadb
-from ..ErrorInterface.interface import ErrorInterface as Error
+from ..ErrorInterface.Execution.execution import ExecutionError as Error
 
 config = {
     "host": "127.0.0.1",

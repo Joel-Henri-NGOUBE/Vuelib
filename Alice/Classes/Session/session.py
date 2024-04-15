@@ -1,5 +1,5 @@
 from flask import session
-from ..ErrorInterface.interface import ErrorInterface as Error
+from ..ErrorInterface.Execution.execution import ExecutionError as Error
 
 class Session:
     
@@ -18,9 +18,12 @@ class Session:
         except KeyError:
             Error.resolve(self._error_identifier, label, Error.key, 'key')
         
-    def set(self, key: str, value):
+    def set(self, key: str|dict, value = None):
         label = "SET"
         try:
+            if isinstance(key, dict):
+                for a_key in key:
+                    self.session[a_key] = key[a_key]
             if isinstance(key, str):  self.session[key] = value
             else: raise TypeError
         except TypeError:

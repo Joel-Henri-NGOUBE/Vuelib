@@ -1,6 +1,6 @@
 from flask import make_response, Response
 # import flask.Response as Response
-from ...ErrorInterface.interface import ErrorInterface as Error
+from ...ErrorInterface.Execution.execution import ExecutionError as Error
 
 class Cookies:
     

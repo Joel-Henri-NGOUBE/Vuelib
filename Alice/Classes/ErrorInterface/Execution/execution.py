@@ -1,4 +1,4 @@
-class ErrorInterface:
+class ExecutionError:
     
     # Les labels d'erreurs: Chaîne de caractère permettant à l'application de reconnaître une erreur
     class_error_identifier = "[ERREUR CLASSE_ERROR_INTERFACE]"
@@ -24,15 +24,15 @@ class ErrorInterface:
     
     def _get_error(message, variable):
         match message:
-            case ErrorInterface.type:
+            case ExecutionError.type:
                 return f"Paramètre {variable}de mauvais type"
-            case ErrorInterface.key:
+            case ExecutionError.key:
                 return f"Clé {variable}introuvable dans la collection"
-            case ErrorInterface.index:
+            case ExecutionError.index:
                 return f"Index {variable}introuvable dans la séquence"
-            case ErrorInterface.zero:
+            case ExecutionError.zero:
                 return f"Aucun nombre n'est divisible par 0."
             case _:
                 return "Erreur non identifiée"
             
-# print(ErrorInterface.resolve("[ERREUR CLASSE_ERROR_INTERFACE]", "RESOLVE", "TYPE"))
+# print(ExecutionError.resolve("[ERREUR CLASSE_ERROR_INTERFACE]", "RESOLVE", "TYPE"))
