@@ -8,7 +8,7 @@ import hashlib
 
 app = Flask("Alice")
 
-app.secret_key = b"THESECRETKEYOFOURFLASKAPPLICATIONISRIGHTOVERHERE737478759539332631512512673674758392927836"
+app.secret_key = b"THESECRETKEYOFOURFLASKAPPLICATIONISRIGHTOVERHERE73747875953933263151256734758392927836"
 
 session = Session()
 
@@ -49,9 +49,10 @@ def login():
                             session.set({"id": id, "firstname": firstname, "lastname": lastname, "mail": mail})
                             favorites = db.select_and_close("SELECT * FROM favorites WHERE id_user = ?", (id,))
                             if len(favorites) != 0:
-                                session.set("favorites", [])
+                                station_codes = []
                                 for set in favorites:
-                                    session.set("favorites", session.get("favorites").append(set["station_code"]))
+                                    station_codes.append(set["station_code"])
+                                session.set("favorites", station_codes)
                             return redirect(url_for("favorites"))
                         return failure("Le mot de passe renseigné ne correspond pas")
                     except TypeError: 
@@ -106,7 +107,7 @@ def guest():
 @app.route("/favorites")
 def favorites():
     if session.get("id"):
-        return "Favorites <a href='logout'>Se déconnecter</a>"
+        return f"Favorites <a href='logout'>Se déconnecter</a> {session.get("favorites")}"
     return redirect(url_for("login"))     
     # return render_template("favorites.html.jinja")
     

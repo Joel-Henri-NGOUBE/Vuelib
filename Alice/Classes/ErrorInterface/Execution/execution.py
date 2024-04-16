@@ -1,7 +1,7 @@
 class ExecutionError:
     
     # Les labels d'erreurs: Chaîne de caractère permettant à l'application de reconnaître une erreur
-    class_error_identifier = "[ERREUR CLASSE_ERROR_INTERFACE]"
+    class_error_identifier = "[ERREUR - CLASSE_ERROR_INTERFACE]"
     type = "TYPE"
     key = "KEY"
     index = "INDEX"
@@ -21,7 +21,7 @@ class ExecutionError:
                 print(f"{identifier} {label} - {cls._get_error(message, variable)}")
             else: raise Exception
         except Exception as err:
-            print(f"{err}")
+            # print(f"{err}")
             cls.resolve(cls.class_error_identifier, labelResolve, cls.exception, f"{err}")
     
     @classmethod
