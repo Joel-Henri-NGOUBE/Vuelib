@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : dim. 14 avr. 2024 à 22:30
+-- Généré le : mar. 16 avr. 2024 à 02:36
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.1.12
 
@@ -24,11 +24,11 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `favoris`
+-- Structure de la table `favorites`
 --
 
-CREATE TABLE `favoris` (
-  `id_favori` int(5) NOT NULL,
+CREATE TABLE `favorites` (
+  `id_favorite` int(5) NOT NULL,
   `id_user` int(5) DEFAULT NULL,
   `station_code` int(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -41,21 +41,28 @@ CREATE TABLE `favoris` (
 
 CREATE TABLE `users` (
   `id_user` int(5) NOT NULL,
-  `nom` varchar(30) DEFAULT NULL,
-  `prenom` varchar(30) DEFAULT NULL,
+  `firstname` varchar(30) DEFAULT NULL,
+  `lastname` varchar(30) DEFAULT NULL,
   `mail` varchar(50) NOT NULL,
-  `mot de passe` varchar(100) NOT NULL
+  `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id_user`, `firstname`, `lastname`, `mail`, `password`) VALUES
+(1, 'a', 'a', 'bonjour', '2cb4b1431b84ec15d35ed83bb927e27e8967d75f4bcd9cc4b25c8d879ae23e18');
 
 --
 -- Index pour les tables déchargées
 --
 
 --
--- Index pour la table `favoris`
+-- Index pour la table `favorites`
 --
-ALTER TABLE `favoris`
-  ADD PRIMARY KEY (`id_favori`),
+ALTER TABLE `favorites`
+  ADD PRIMARY KEY (`id_favorite`),
   ADD KEY `id_user` (`id_user`);
 
 --
@@ -69,26 +76,26 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT pour la table `favoris`
+-- AUTO_INCREMENT pour la table `favorites`
 --
-ALTER TABLE `favoris`
-  MODIFY `id_favori` int(5) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `favorites`
+  MODIFY `id_favorite` int(5) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `favoris`
+-- Contraintes pour la table `favorites`
 --
-ALTER TABLE `favoris`
-  ADD CONSTRAINT `favoris_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
+ALTER TABLE `favorites`
+  ADD CONSTRAINT `favorites_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -6,6 +6,7 @@ class ExecutionError:
     key = "KEY"
     index = "INDEX"
     zero = "ZERO"
+    exception = "EXCEPTION"
     
     @classmethod
     def resolve(cls, identifier: str, label: str, message: str = "", variable: str = "") -> str:
@@ -18,20 +19,24 @@ class ExecutionError:
                 if variable:
                     variable += " "
                 print(f"{identifier} {label} - {cls._get_error(message, variable)}")
-            else: raise TypeError
-        except TypeError:
-            cls.resolve(cls.class_error_identifier, labelResolve, cls.type)
+            else: raise Exception
+        except Exception as err:
+            print(f"{err}")
+            cls.resolve(cls.class_error_identifier, labelResolve, cls.exception, f"{err}")
     
-    def _get_error(message, variable):
+    @classmethod
+    def _get_error(cls, message, variable):
         match message:
-            case ExecutionError.type:
+            case cls.type:
                 return f"Paramètre {variable}de mauvais type"
-            case ExecutionError.key:
+            case cls.key:
                 return f"Clé {variable}introuvable dans la collection"
-            case ExecutionError.index:
+            case cls.index:
                 return f"Index {variable}introuvable dans la séquence"
-            case ExecutionError.zero:
+            case cls.zero:
                 return f"Aucun nombre n'est divisible par 0."
+            case cls.exception:
+                return f"{variable}"
             case _:
                 return "Erreur non identifiée"
             

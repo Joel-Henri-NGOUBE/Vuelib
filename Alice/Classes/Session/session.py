@@ -11,7 +11,10 @@ class Session:
     def get(self, key: str):
         label = "GET"
         try:
-            if isinstance(key, str): return self.session[key]
+            if isinstance(key, str): 
+                if key in self.session:
+                    return self.session[key]
+                return False
             else: raise TypeError
         except TypeError:
             Error.resolve(self._error_identifier, label, Error.type, 'key')
@@ -22,15 +25,16 @@ class Session:
         label = "SET"
         try:
             if isinstance(key, dict):
+                # print(key)
                 for a_key in key:
                     self.session[a_key] = key[a_key]
             if isinstance(key, str):  self.session[key] = value
-            else: raise TypeError
-        except TypeError:
-            Error.resolve(self._error_identifier, label, Error.type, 'key')
+            # else: raise Exception
+        except Exception as err:
+            Error.resolve(self._error_identifier, label, Error.exception, f"{err}")
         # Techniquement inatteignable
-        except KeyError:
-            Error.resolve(self._error_identifier, label, Error.key, 'key')
+        # except KeyError:
+        #     Error.resolve(self._error_identifier, label, Error.key, 'key')
             
     def pop(self, key: str):
         label = "POP"
@@ -41,6 +45,9 @@ class Session:
             Error.resolve(self._error_identifier, label, Error.type, 'key')
         except KeyError:
             Error.resolve(self._error_identifier, label, Error.key, 'key')
+            
+    def clean(self):
+        self.session.clear()
 
 
 

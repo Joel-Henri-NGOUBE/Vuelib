@@ -6,7 +6,7 @@ config = {
     "port": 3306,
     "user": "root",
     "password": "",
-    "database": "immobilier"
+    "database": "vuelib"
 }
 
 class Database:
@@ -26,6 +26,24 @@ class Database:
     def _check_params(self, sql_request: str, params: tuple|None = None):
         if params is None: self._curseur.execute(sql_request)
         else: self._curseur.execute(sql_request, params)
+    
+    # def _dictify(a, self,data, dataCell):
+    #     i = 0
+    #     # print(a_result)
+    #     for index in self._curseur.description:
+    #         # print(i)
+    #         dataCell[str(index[0])] = a[i]
+    #         i += 1
+    #     data.append(dataCell)
+    #     return data
+    
+    def _get_data(self, sql_request: str, params: tuple|None = None):
+        self._check_params(sql_request, params)
+        result = self._curseur.fetchall()
+        description = self._curseur.description
+        headers = list(map(lambda h: h[0], description))
+        data = list(map(lambda d: dict(zip(headers, d)), result))
+        return data
         
     def select(self, sql_request: str, params: tuple|None = None):
         """
@@ -33,9 +51,9 @@ class Database:
         """
         label = "SELECT"
         try:
-            self._check_params(sql_request, params)
-            return self._curseur.fetchall()
-        except: Error.resolve(self._error_identifier, label)
+            return self._get_data(sql_request, params)
+        except Exception as err:
+            Error.resolve(self._error_identifier, label, Error.exception, f"{err}")
             
     
     def select_and_close(self, sql_request: str, params: tuple|None = None):
@@ -44,11 +62,12 @@ class Database:
         """
         label = "SELECT_AND_CLOSE"
         try:
-            self._check_params(sql_request, params)
-            result = self._curseur.fetchall()
+            result = self._get_data(sql_request, params)
             self._close_connection()
             return result
-        except: Error.resolve(self._error_identifier, label)
+        except Exception as err:
+            Error.resolve(self._error_identifier, label, Error.exception, f"{err}")
+
     
     def mutate(self, sql_request: str, params: tuple|None = None):
         """
@@ -58,7 +77,8 @@ class Database:
         try:
             self._check_params(sql_request, params) 
             self._connexion.commit()
-        except: Error.resolve(self._error_identifier, label)
+        except Exception as err: 
+            Error.resolve(self._error_identifier, label, Error.exception, f"{err}")
         
     def mutate_and_close(self, sql_request: str, params: tuple|None = None):
         """
@@ -69,6 +89,23 @@ class Database:
             self.mutate(sql_request, params)
             self._close_connection()
         except: Error.resolve(self._error_identifier, label)
+        
+    def close(self):
+        self._close_connection()
+        
+    # def old_function():
+        # data = list()
+        # dataCell = dict()
+        # # for a_result in result:
+        # #     i = 0
+        # #     print(a_result)
+        # #     for index in self._curseur.description:
+        # #         # print(i)
+        # #         dataCell[str(index[0])] = a_result[i]
+        # #         i += 1
+        # #     data.append(dataCell)
+        # data2 = map(self._dictify(a,self, data, dataCell), result)
+
 
 
 
