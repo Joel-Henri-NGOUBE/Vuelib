@@ -3,12 +3,11 @@ from Classes.Database.database import Database
 from Classes.Session.session import Session
 from Classes.Request.Cookies.cookies import Cookies
 from Classes.ErrorInterface.Execution.execution import ExecutionError as Error
-from .Utils.utils_functions import values, success, failure
-import hashlib
+from .Utils.utils_functions import values, success, failure, hashing
 
 app = Flask("Alice")
 
-app.secret_key = b"THESECRETKEYOFOURFLASKAPPLICATIONISRIGHTOVERHERE73747875953933263151256734758392927836"
+app.secret_key = b"THESECRETKEYOFOURFLASKAPPLICATIONISRIGHTOVERHERE4794246789963759836"
 
 session = Session()
 
@@ -32,10 +31,19 @@ def login():
             label = "LOGIN"
         # try:
             db = Database()
+            cookies = Cookies(request)
             if request.method == "GET":
-                return render_template("login.html.jinja")
+                arguments = {
+                    "mail": cookies.get("mail"),
+                    "theme": cookies.get("theme"),
+                    "dark_theme_url": url_for("static", filename="/CSS/dark.css"),
+                    "light_theme_url": url_for("static", filename="/CSS/light.css"),
+                    "theme_setter_url": url_for("static", filename="/JavaScript/setTheme.js")
+                }
+                return render_template("login.html.jinja", **arguments)
             if request.method == "POST":
-                mail, password = values(request.form)
+                mail, password, remember = values(request.form)
+                print(remember)
                 user = db.select("SELECT * FROM users WHERE mail = ?", (mail,))
                 try:
                     id, firstname, lastname, mail, real_password = values(user[0])
@@ -43,9 +51,9 @@ def login():
                     Error.resolve(error_identifier, label, Error.type, "user")    
                 if user[0]:
                     try:
-                        print(real_password)
-                        print(hashlib.sha256(password.encode("utf-8")).hexdigest())
-                        if real_password == hashlib.sha256(password.encode("utf-8")).hexdigest():
+                        # print(real_password)
+                        # print(hashlib.sha256(password.encode("utf-8")).hexdigest())
+                        if real_password == hashing(password):
                             session.set({"id": id, "firstname": firstname, "lastname": lastname, "mail": mail})
                             favorites = db.select_and_close("SELECT * FROM favorites WHERE id_user = ?", (id,))
                             if len(favorites) != 0:
@@ -53,7 +61,10 @@ def login():
                                 for set in favorites:
                                     station_codes.append(set["station_code"])
                                 session.set("favorites", station_codes)
-                            return redirect(url_for("favorites"))
+                                res = cookies.make("theme", "light", redirect(url_for("favorites")))
+                                if remember == "on":
+                                    res = cookies.make("mail", str(mail), res)
+                            return res
                         return failure("Le mot de passe renseigné ne correspond pas")
                     except TypeError: 
                         Error.resolve(error_identifier, label, Error.type, "user")    
@@ -79,7 +90,7 @@ def signup():
                 if user:
                     db.close()
                     return failure(["Un utilisateur possède déjà un espace rattaché à cette adresse mail"])
-                password = hashlib.sha256(password.encode("utf-8")).hexdigest()
+                password = hashing(password)
                 db.mutate_and_close("INSERT INTO users (firstname, lastname, mail, password) VALUES (?,?,?,?)", (firstname, lastname, mail, password))
                 return success("La création de votre compte utilisateur a réussi")
         except Exception as err: 

@@ -18,9 +18,13 @@ class Cookies:
         except:
             Error.resolve(self.error_identifier, label)
     
-    def make(self, key: str, value) -> Response:
+    def make(self, key: str, value, response: Response|bool = False) -> Response:
         label = "MAKE"
-        res = make_response("Cookie")
+        if response:
+            res = response
+        else: 
+            res = make_response("Cookie")
+        
         try:
             if isinstance(value, int):
                 value = str(value)

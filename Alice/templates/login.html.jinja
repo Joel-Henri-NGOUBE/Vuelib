@@ -4,18 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    {% if theme == "light" %}
+    <link rel="stylesheet" href="{{ light_theme_url }}" />
+    {% elif theme == "dark" %}
+    <link rel="stylesheet" href="{{ dark_theme_url }}" />
+    {% endif %}
+    {# link rel="./login.css" #}
 </head>
 <body>
     <form method="POST">
-        <label for="mail">Adresse mail <span>*</span></label>
-        <input type="text" id="mail" name="mail" />
 
+        <label for="mail">Adresse mail <span>*</span></label>
+        {% if mail %}
+        <input type="text" id="mail" name="mail" value="{{ mail }}"/>
+        {% else %}
+        <input type="text" id="mail" name="mail" />
+        {% endif %}
         <label for="password">Mot de passe <span>*</span></label>
         <input type="text" id="password" name="password" />
 
         <button>Se connecter</button>
 
+        {% if mail %}
+        <input type="radio" id="remember" name="remember" checked>
+        {% else %}
+        <input type="radio" id="remember" name="remember">
+        {% endif %}
+
+        <label for="remember">Enregistrer l'adresse mail </label>
+
     </form>
+
+    {% if theme == "light" %}
+    <button id="theme">Clair</button>
+    {% elif theme == "dark" %}
+    <button id="theme">Sombre</button>
+    {% endif %}
+
     <a href="/signup">Inscrivez-vous</a>
 </body>
+
+<script src="{{ theme_setter_url }}"></script>
+<script>
+    console.dir(document.querySelector("input[type='radio']"))
+    console.dir(document)
+ checked = document.querySelector("input[type='radio']")
+ document.querySelector("input[type='radio']").addEventListener("click", (e) => {
+    if (e.target.value === "on"){
+        e.target.value = "off"
+     }
+     else{
+        e.target.value = "on"
+     }
+     e.target.checked = !e.target.checked
+    console.log(e.target.value)
+})
+document.querySelector("#theme").addEventListener("click", () => {
+        setTheme("{{ light_theme_url }}", "{{ dark_theme_url }}")
+} )
+</script>
 </html>
