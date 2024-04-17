@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for, redirect
+from flask import Flask, request, render_template, url_for, redirect, abort
 from Classes.Database.database import Database
 from Classes.Session.session import Session
 from Classes.Request.Cookies.cookies import Cookies
@@ -7,7 +7,7 @@ from .Utils.utils_functions import values, success, failure, hashing
 
 app = Flask("Alice")
 
-app.secret_key = b"THESECRETKEYOFOURFLASKAPPLICATIONISRIGHTOVERHERE4794246789963759836"
+app.secret_key = b"THESECRETKEYOFOURFLASKAPPLICATIONISRIGHTOVERHERE94246789963759836"
 
 session = Session()
 
@@ -42,36 +42,54 @@ def login():
                 }
                 return render_template("login.html.jinja", **arguments)
             if request.method == "POST":
-                mail, password, remember = values(request.form)
-                print(remember)
-                user = db.select("SELECT * FROM users WHERE mail = ?", (mail,))
+                form_length = len(request.form)
                 try:
-                    id, firstname, lastname, mail, real_password = values(user[0])
-                except TypeError: 
-                    Error.resolve(error_identifier, label, Error.type, "user")    
-                if user[0]:
+                    if form_length == 3:
+                        mail, password, remember = values(request.form)
+                    elif form_length == 2:
+                        mail, password = values(request.form)
+                    else:
+                        abort(401)
+                except Exception:
+                    Error.resolve(error_identifier, label, Error.exception, f"{err}")    
+                # print(remember)
+                if mail and password:
+                    user = db.select("SELECT * FROM users WHERE mail = ?", (mail,))
                     try:
-                        # print(real_password)
-                        # print(hashlib.sha256(password.encode("utf-8")).hexdigest())
-                        if real_password == hashing(password):
-                            session.set({"id": id, "firstname": firstname, "lastname": lastname, "mail": mail})
-                            favorites = db.select_and_close("SELECT * FROM favorites WHERE id_user = ?", (id,))
-                            if len(favorites) != 0:
-                                station_codes = []
-                                for set in favorites:
-                                    station_codes.append(set["station_code"])
-                                session.set("favorites", station_codes)
-                                res = cookies.make("theme", "light", redirect(url_for("favorites")))
-                                if remember == "on":
-                                    res = cookies.make("mail", str(mail), res)
-                            return res
-                        return failure("Le mot de passe renseigné ne correspond pas")
+                        id, firstname, lastname, mail, real_password = values(user[0])
                     except TypeError: 
                         Error.resolve(error_identifier, label, Error.type, "user")    
-                    except Exception as err: 
-                        Error.resolve(error_identifier, label, Error.exception, f"{err}")    
-                db.close()
-                return failure("Aucun utilisateur ne possède l'adresse mail renseignée")
+                    if user[0]:
+                        try:
+                            # print(real_password)
+                            # print(hashlib.sha256(password.encode("utf-8")).hexdigest())
+                            if real_password == hashing(password):
+                                session.set({"id": id, "firstname": firstname, "lastname": lastname, "mail": mail})
+                                favorites = db.select_and_close("SELECT * FROM favorites WHERE id_user = ?", (id,))
+                                if len(favorites) != 0:
+                                    station_codes = []
+                                    for set in favorites:
+                                        station_codes.append(set["station_code"])
+                                    session.set("favorites", station_codes)
+                                res = redirect(url_for("favorites"))
+                                if not cookies.get("theme"):
+                                    res = cookies.make("theme", "light", res)
+                                if form_length == 3:
+                                    if remember == "on":
+                                        res = cookies.make("mail", str(mail), res)
+                                if form_length == 2:
+                                    if cookies.get("mail"):
+                                        cookies.pop("mail", res)
+                                print(res.data)
+                                return res
+                            return failure("Le mot de passe renseigné ne correspond pas")
+                        except TypeError: 
+                            Error.resolve(error_identifier, label, Error.type, "user")    
+                        except Exception as err: 
+                            Error.resolve(error_identifier, label, Error.exception, f"{err}")    
+                    db.close()
+                    return failure("Aucun utilisateur ne possède l'adresse mail renseignée.")
+                return failure("L'un des champs renseignés est vide.")
         # except Exception as err: 
         #     Error.resolve(error_identifier, label, Error.exception, f"{err}")
     return redirect(url_for("favorites"))

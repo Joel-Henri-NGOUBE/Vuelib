@@ -35,9 +35,12 @@ class Cookies:
         except TypeError:
             Error.resolve(self.error_identifier, label, Error.type, "key")
     
-    def pop(self, key: str):
+    def pop(self, key: str, response: Response|bool = False):
         label = "POP"
-        res = make_response("not_Cookie")
+        if response:
+            res = response
+        else: 
+            res = make_response("not_Cookie")
         try:
             if isinstance(key, str): 
                 res.delete_cookie(key)

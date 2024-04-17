@@ -4,10 +4,10 @@ def values(dictionnary: dict):
     return tuple(dictionnary.values())
 
 def success(message):
-    return {"Statut": "Succès", "Message": message}
+    return {"Status": "success", "Message": message}
 
 def failure(message):
-    return {"Statut": "Echec", "Message": message}
+    return {"Status": "failure", "Message": message}
 
 def hashing(password):
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
