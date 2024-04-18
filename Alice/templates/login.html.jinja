@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    {% if theme == "light" %}
-    <link rel="stylesheet" href="{{ light_theme_url }}" />
-    {% elif theme == "dark" %}
+    {% if theme == "dark" %}
     <link rel="stylesheet" href="{{ dark_theme_url }}" />
+    {% else %}
+    <link rel="stylesheet" href="{{ light_theme_url }}" />
     {% endif %}
     {# link rel="./login.css" #}
 </head>
 <body>
+    {% if error %}
+    <div class="error">
+        <p id="error">{{error}}</p>
+    </div>
+    {% endif %}
     <form method="POST">
 
         <label for="mail">Adresse mail <span>*</span></label>
@@ -35,10 +40,10 @@
 
     </form>
 
-    {% if theme == "light" %}
-    <button id="theme">Clair</button>
-    {% elif theme == "dark" %}
+    {% if theme == "dark" %}
     <button id="theme">Sombre</button>
+    {% else %}
+    <button id="theme">Clair</button>
     {% endif %}
 
     <a href="/signup">Inscrivez-vous</a>

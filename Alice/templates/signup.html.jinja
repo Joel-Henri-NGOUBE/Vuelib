@@ -6,6 +6,19 @@
     <title>Document</title>
 </head>
 <body>
+
+    {% if message %}
+    <div class="success">
+        <p id="success">{{message}}</p>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error">
+        <p id="error">{{error}}</p>
+    </div>
+    {% endif %}
+
     <form method="POST">
         <label for="firstname">Prénom <span>*</span></label>
         <input type="text" id="firstname" name="firstname" />
