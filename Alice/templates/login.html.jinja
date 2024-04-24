@@ -12,6 +12,8 @@
     {# link rel="./login.css" #}
 </head>
 <body>
+{% include 'headers/guest.html' %}
+
     {% if error %}
     <div class="error">
         <p id="error">{{error}}</p>
@@ -26,7 +28,7 @@
         <input type="text" id="mail" name="mail" />
         {% endif %}
         <label for="password">Mot de passe <span>*</span></label>
-        <input type="text" id="password" name="password" />
+        <input type="password" id="password" name="password" />
 
         <button>Se connecter</button>
 
