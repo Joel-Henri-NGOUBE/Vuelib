@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-
+{% include 'headers/guest.html' %}
     {% if message %}
     <div class="success">
         <p id="success">{{message}}</p>
@@ -30,7 +30,7 @@
         <input type="text" id="mail" name="mail" />
 
         <label for="password">Mot de passe <span>*</span></label>
-        <input type="text" id="password" name="password" />
+        <input type="password" id="password" name="password" />
 
         <button>S'inscrire</button>
 
