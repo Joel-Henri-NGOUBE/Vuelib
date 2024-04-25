@@ -1,3 +1,5 @@
+# A développer pour aller plus loin.
+
 class Verificator:
     # Renvoie soit True soit les erreurs
     def __init__(self, form: dict):

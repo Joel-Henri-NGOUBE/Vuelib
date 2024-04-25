@@ -1,9 +1,15 @@
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from flask import Flask, request, render_template, url_for, redirect, abort
 from Classes.Database.database import Database
 from Classes.Session.session import Session
 from Classes.Request.Cookies.cookies import Cookies
 from Classes.ErrorInterface.Execution.execution import ExecutionError as Error
-from .Utils.utils_functions import values, hashing, render_error_login, render_error_signup, render_success_signup
+from Utils.utils_functions import values, hashing, render_error_login, render_error_signup, render_success_signup
+from Client.client import retrieve_stations
 
 app = Flask("Alice")
 
@@ -136,7 +142,8 @@ def guest():
     #     return redirect(url_for("login"))
     db = Database()
     print(db.select_and_close("SELECT * FROM users"))
-    return "Guest <a href='logout'>Se déconnecter</a>"
+    
+    return f"Guest <a href='logout'>Se déconnecter</a>\n {retrieve_stations()}"
     # return render_template("guest.html.jinja")
 
 @app.route("/favorites")
@@ -145,4 +152,6 @@ def favorites():
         return f"Favorites <a href='logout'>Se déconnecter</a> {session.get("favorites")}"
     return redirect(url_for("login"))     
     # return render_template("favorites.html.jinja")
+    
+# https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/velib-disponibilite-en-temps-reel/records?select=*&where=nom_arrondissement_communes=%22Paris%22&order_by=stationcode%20DESC&limit=100
     
