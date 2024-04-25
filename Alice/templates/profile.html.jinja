@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+    <ul>
+        <li><strong>ID:</strong> {{ user.id }}</li>
+        <li><strong>First Name:</strong> {{ user.firstname }}</li>
+        <li><strong>Last Name:</strong> {{ user.lastname }}</li>
+        <li><strong>Email:</strong> {{ user.mail }}</li>
+    </ul>
+    <a href="/favorites">Voir mes stations favorites</a>
+    <a href="/favorites/add">Ajouter une nouvelle station favorite</a>
+</body>
+</html>
