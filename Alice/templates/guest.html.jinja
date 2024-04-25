@@ -24,7 +24,7 @@
         {% include 'headers/guest.html' %}
     {% endif %}
 
-    <h1>Découvrez 100 des {{ donnee['total_count'] }} stations de velib à Paris</h1>
+    <h1>Découvrez {{max_number_stations}} des {{ donnee['total_count'] }} stations de velib à Paris</h1>
 
     <div id="map"></div>
     <div class="list">
@@ -37,6 +37,11 @@
 </body>
 
 <script src="/static/JavaScript/map.js"></script>
-<script> map({{donnee}})
+
+<script> 
+    let data_string = {{data_string}}
+    let data = JSON.parse(JSON.stringify(data_string))
+    map(data)
+    {#console.log()#}
 </script>
 </html>
