@@ -7,7 +7,7 @@ function map(donnee){
      map.setView([48.8534, 2.3488], 25); 
  
      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-         maxZoom: 12,
+         maxZoom: 14,
          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
      }).addTo(map);
  
@@ -52,7 +52,7 @@ function map(donnee){
         // console.log(donnee.results[0].coordonnees_geo.lat)
         // console.log(donnee.results[0].coordonnees_geo.lon)
 
-        donnee.results.map((result)=>{
+        donnee.map((result)=>{
             L.marker([result.coordonnees_geo.lat, result.coordonnees_geo.lon]).addTo(map)
             // .bindPopup(<p>result.name</p> + '<br>'+ result.capacity)
             .bindPopup(`
@@ -63,10 +63,8 @@ function map(donnee){
             <br> <b>Vélos disponible : </b>${result.numbikesavailable}
             <br> <b>Vélos mécanique : </b>${result.mechanical}
             <br> <b>Vélos électrique : </b>${result.ebike}
-            `)
+            `).openPopup()
             L.circle([result.coordonnees_geo.lat, result.coordonnees_geo.lon], {radius: 1}).addTo(map);
         })
         
 }
-// coordonnees_geo.lat 
-// coordonnees_geo.long 

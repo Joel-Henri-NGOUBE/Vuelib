@@ -4,15 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        #map { height: 600px; }
+    </style>
 </head>
 <body>
-    <h1>User Profile</h1>
+    <h1>Bienvenue {{ firstname }} </h1>
     <ul>
         <li><strong>First Name:</strong> {{ firstname }}</li>
         <li><strong>Last Name:</strong> {{ lastname }}</li>
         <li><strong>Email:</strong> {{ mail }}</li>
     </ul>
 
+
+    <div id="map"></div>
     <ul>
         {% for station in favorite_stations %}
              <li>
@@ -30,5 +42,13 @@
     {#<a href="/favorites/add">Ajouter une nouvelle station favorite</a>#}
     
 </body>
+<script src="/static/JavaScript/map_profile.js"></script>
+
+<script> 
+    let data_string = {{data_string}}
+    let data = JSON.parse(JSON.stringify(data_string))
+    map(data)
+    {#console.log()#}
+</script>
 <script src={{ url_for("static", filename="JavaScript/favorites_profile.js")}}></script>
 </html>

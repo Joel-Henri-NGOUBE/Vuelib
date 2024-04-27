@@ -167,13 +167,16 @@ def profile():
         donnee, _ = retrieve_stations()
         favorites = session.get("favorites")
         favorite_stations = filtering(lambda s: int(s["stationcode"]) in tuple(favorites), donnee["results"])
+        data_string = json.dumps(favorite_stations)
         print(favorite_stations)
         arguments = {
             "firstname": session.get("firstname"),
             "lastname": session.get("lastname"),
             "mail": session.get("mail"),
-            "favorite_stations": favorite_stations
+            "favorite_stations": favorite_stations,
+            "data_string": data_string,
         }
+        print(data_string)
         # if len(favorites)
         # return f"Favorites <a href='logout'>Se déconnecter</a> {session.get("favorites")}"
         return render_template("profile.html.jinja", **arguments)
