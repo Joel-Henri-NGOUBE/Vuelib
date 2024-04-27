@@ -13,4 +13,4 @@ def get_velib_data():
         print("Erreur lors de la requête :", str(e))
         return None
 
-velib_data = get_velib_data()
+print(get_velib_data())

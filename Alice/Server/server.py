@@ -5,16 +5,17 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from flask import Flask, request, render_template, url_for, redirect, abort
 from Classes.Database.database import Database
+from Classes.Database.Requests.requests import Requests as Req
 from Classes.Session.session import Session
 from Classes.Request.Cookies.cookies import Cookies
 from Classes.ErrorInterface.Execution.execution import ExecutionError as Error
-from Utils.utils_functions import values, hashing, render_error_login, render_error_signup, render_success_signup
+from Utils.utils_functions import values, hashing, render_error_login, render_error_signup, render_success_signup, render_success_favorites, render_error_favorites, filtering, mapping
 import json
 from Client.client import retrieve_stations
 
 app = Flask("Alice")
 
-app.secret_key = b"THESECRETKEYOFOURFLASKAPPLICATIONISRIGHTOVERHERE94246789963759836"
+app.secret_key = b"THESECRETKEYOFOURFLASKAPPLICATIONISRIGHTOVERHERE94246789963736"
 
 session = Session()
 
@@ -73,12 +74,13 @@ def login():
                         if real_password == hashing(password):
                             session.set({"id": id, "firstname": firstname, "lastname": lastname, "mail": mail})
                             favorites = db.select_and_close("SELECT * FROM favorites WHERE id_user = ?", (id,))
+                            station_codes = []
                             if len(favorites):
-                                station_codes = []
                                 for set in favorites:
                                     station_codes.append(set["station_code"])
-                                session.set("favorites", station_codes)
-                            res = redirect(url_for("favorites"))
+                            session.set("favorites", station_codes)
+                            print(session.get("favorites"))
+                            res = redirect(url_for("profile"))
                             if not cookies.get("theme"):
                                 res = cookies.make("theme", "light", res)
                             if form_length == 3:
@@ -94,7 +96,7 @@ def login():
                 db.close()
                 return render_error_login("Aucun utilisateur ne possède l'adresse mail renseignée.")
             return render_error_login("L'un des champs renseignés est vide.")
-    return redirect(url_for("favorites"))
+    return redirect(url_for("profile"))
     
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -130,7 +132,7 @@ def signup():
                 return render_error_signup("L'un des champs obligatoires est vide")
         except Exception as err: 
             Error.resolve(error_identifier, label, Error.exception, f"{err}")
-    return redirect(url_for("favorites"))
+    return redirect(url_for("profile"))
     
 @app.route("/logout")
 def logout():
@@ -144,6 +146,7 @@ def landing():
 @app.route("/guest")
 def guest():
     donnee, data_string = retrieve_stations()
+    # print(donnee["results"][-1])
     arguments = {
         "donnee": donnee,
         "data_string": data_string,
@@ -151,14 +154,48 @@ def guest():
     }
     # db = Database()
     if session.get("id"):
+        favorites = session.get("favorites")
+        arguments["donnee"]["results"] = mapping(lambda s: {**s, "favorite": True} if int(s["stationcode"]) in tuple(favorites) else {**s, "favorite": False}, donnee["results"])
         return render_template("guest.html.jinja", **arguments , logged_in = True)
     return render_template("guest.html.jinja", **arguments , logged_in = False)
 
 
-@app.route("/favorites")
+@app.route("/profile")
+def profile():
+    id = session.get("id")
+    if id:
+        donnee, _ = retrieve_stations()
+        favorites = session.get("favorites")
+        favorite_stations = filtering(lambda s: int(s["stationcode"]) in tuple(favorites), donnee["results"])
+        print(favorite_stations)
+        arguments = {
+            "firstname": session.get("firstname"),
+            "lastname": session.get("lastname"),
+            "mail": session.get("mail"),
+            "favorite_stations": favorite_stations
+        }
+        # if len(favorites)
+        # return f"Favorites <a href='logout'>Se déconnecter</a> {session.get("favorites")}"
+        return render_template("profile.html.jinja", **arguments)
+    return redirect(url_for("login"))  
+    # return render_template("profile.html.jinja")
+    
+@app.post("/favorites")
 def favorites():
-    if session.get("id"):
-        return f"Favorites <a href='logout'>Se déconnecter</a> {session.get("favorites")}"
-    return redirect(url_for("login"))     
-    # return render_template("favorites.html.jinja")
+    id = session.get("id")
+    if id:
+        favorites: list = session.get("favorites")
+        action, station_code = values(request.json)
+        station_code = int(station_code)
+        if action == "add":
+            Req.add_favorite_station(id, station_code)
+            favorites.append(station_code)
+            session.set("favorites", favorites)
+            print(session.get("favorites"))
+            return render_success_favorites("Favorite successfully added")
+        if action == "remove":
+            Req.remove_favorite_station(id, station_code)
+            session.set("favorites", filtering(lambda sc: sc != station_code, favorites))
+            return render_success_favorites("Favorite successfully remove")
+    return redirect(url_for("login"))
         

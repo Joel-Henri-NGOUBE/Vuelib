@@ -8,12 +8,27 @@
 <body>
     <h1>User Profile</h1>
     <ul>
-        <li><strong>ID:</strong> {{ user.id }}</li>
-        <li><strong>First Name:</strong> {{ user.firstname }}</li>
-        <li><strong>Last Name:</strong> {{ user.lastname }}</li>
-        <li><strong>Email:</strong> {{ user.mail }}</li>
+        <li><strong>First Name:</strong> {{ firstname }}</li>
+        <li><strong>Last Name:</strong> {{ lastname }}</li>
+        <li><strong>Email:</strong> {{ mail }}</li>
     </ul>
-    <a href="/favorites">Voir mes stations favorites</a>
-    <a href="/favorites/add">Ajouter une nouvelle station favorite</a>
+
+    <ul>
+        {% for station in favorite_stations %}
+             <li>
+                 <strong>Name:</strong> {{ station['name'] }}<br>
+                 <strong>Capacity:</strong> {{ station['capacity'] }}<br>
+                 <strong>Number of Docks Available:</strong> {{ station['numdocksavailable'] }}<br>
+                 <strong>Number of Bikes Available:</strong> {{ station['numbikesavailable'] }}<br>
+                 <strong>Mechanical:</strong> {{ station['mechanical'] }}<br>
+                 <strong>Ebike:</strong> {{ station['ebike'] }}<br>
+                 <button onclick="updateFavoriteStation('{{ station['stationcode'] }}')">Modifier le favori</button>
+                 <button onclick="removeFavoriteStation('{{ station['stationcode'] }}')">Enlever des favoris</button>
+         {% endfor %}
+     </ul>
+    {#<a href="/favorites">Voir mes stations favorites</a>#}
+    {#<a href="/favorites/add">Ajouter une nouvelle station favorite</a>#}
+    
 </body>
+<script src={{ url_for("static", filename="JavaScript/favorites_profile.js")}}></script>
 </html>

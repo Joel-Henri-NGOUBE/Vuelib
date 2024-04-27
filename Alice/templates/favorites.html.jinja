@@ -7,48 +7,10 @@
 </head>
 <body>
     <h1>Stations favorites</h1>
-    <ul>
-       {% for station in data['results'] %}
-            <li>
-                <strong>Station Code:</strong> {{ station['stationcode'] }}<br>
-                <strong>Name:</strong> {{ station['name'] }}<br>
-                <strong>Is Installed:</strong> {{ station['is_installed'] }}<br>
-                <strong>Capacity:</strong> {{ station['capacity'] }}<br>
-                <strong>Number of Docks Available:</strong> {{ station['numdocksavailable'] }}<br>
-                <strong>Number of Bikes Available:</strong> {{ station['numbikesavailable'] }}<br>
-                <strong>Mechanical:</strong> {{ station['mechanical'] }}<br>
-                <strong>Ebike:</strong> {{ station['ebike'] }}<br>
-                <strong>Is Renting:</strong> {{ station['is_renting'] }}<br>
-                <strong>Is Returning:</strong> {{ station['is_returning'] }}<br>
-                <strong>Due Date:</strong> {{ station['duedate'] }}<br>
-                <strong>Coordinates:</strong> Lon: {{ station['coordonnees_geo']['lon'] }}, Lat: {{ station['coordonnees_geo']['lat'] }}<br>
-                <strong>Commune:</strong> {{ station['nom_arrondissement_communes'] }}<br>
-                <button onclick="addFavoriteStation('{{ station['name'] }}', '{{ station['stationcode'] }}')">Add to Favorites</button>
-                 <button onclick="updateFavoriteStation('${station.stationcode}')">Update</button>
-                    <button onclick="deleteFavoriteStation('${station.stationcode}')">Delete</button>
-        {% endfor %}
-    </ul>
+    
 <script>
         // Pour ajouter une nouvelle station favorite
-        function addFavoriteStation(name, code) {
-            const stationData = {
-                name: name,
-                stationcode: code
-            };
-            fetch('/favorites', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(stationData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                fetchFavoriteStations(); 
-            })
-            .catch(error => console.error('Error:', error));
-        }
+        
 
         // Fonction pour mettre à jour les stations favorites affichées dans l'interface utilisateur
         function updateFavoriteStations(favoriteStations) {
@@ -57,19 +19,12 @@
             favoriteStations.forEach(station => {
                 const stationElement = document.createElement('li');
                 stationElement.innerHTML = `
-                    <strong>Station Code:</strong> ${station.stationcode}<br>
                     <strong>Name:</strong> ${station.name}<br>
-                    <strong>Is Installed:</strong> ${station.is_installed}<br>
                     <strong>Capacity:</strong> ${station.capacity}<br>
                     <strong>Number of Docks Available:</strong> ${station.numdocksavailable}<br>
                     <strong>Number of Bikes Available:</strong> ${station.numbikesavailable}<br>
                     <strong>Mechanical:</strong> ${station.mechanical}<br>
                     <strong>Ebike:</strong> ${station.ebike}<br>
-                    <strong>Is Renting:</strong> ${station.is_renting}<br>
-                    <strong>Is Returning:</strong> ${station.is_returning}<br>
-                    <strong>Due Date:</strong> ${station.duedate}<br>
-                    <strong>Coordinates:</strong> Lon: ${station.coordonnees_geo.lon}, Lat: ${station.coordonnees_geo.lat}<br>
-                    <strong>Commune:</strong> ${station.nom_arrondissement_communes}<br>
                     <button onclick="updateFavoriteStation('${station.stationcode}')">Update</button>
                     <button onclick="deleteFavoriteStation('${station.stationcode}')">Delete</button>
                     `;
