@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    {% if theme == "dark" %}
+    <link rel="stylesheet" href="{{ dark_theme_url }}" />
+    {% else %}
+    <link rel="stylesheet" href="{{ light_theme_url }}" />
+    {% endif %}
+    {# link rel="./profile.css" #}
 </head>
 <body>
     <h1>User Profile</h1>
@@ -35,5 +41,7 @@
      </ul>
     
 </body>
+
 <script src={{ url_for("static", filename="JavaScript/favorites_profile.js")}}></script>
+
 </html>

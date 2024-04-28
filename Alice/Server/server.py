@@ -21,6 +21,8 @@ session = Session()
 
 error_identifier = "[ERREUR - SERVEUR]:"
 
+dark_mode = True
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if not session.get("id"):
@@ -86,13 +88,16 @@ def login():
     return redirect(url_for("profile"))
     
 @app.route("/signup", methods=["GET", "POST"])
+
 def signup():
     if not session.get("id"):
         label = "SIGNUP"
         try:
             db = Database()
+            cookies = Cookies(request)
             if request.method == "GET":
-                return render_template("signup.html.jinja")
+                return render_template("signup.html.jinja", theme = cookies.get("theme"))
+            
             if request.method == "POST":
                 # Récupérer les données de formulaires
                 form = request.form
@@ -133,7 +138,9 @@ def landing():
     return redirect(url_for("guest"))
 
 @app.route("/guest")
+
 def guest():
+    cookies = Cookies(request)
     label = "GUEST"
     try:
         # Récupérer les données de l'API
@@ -141,23 +148,30 @@ def guest():
         arguments = {
             "donnee": donnee,
             "data_string": data_string,
-            "max_number_stations": len(donnee["results"])
-        }
+            "max_number_stations": len(donnee["results"]),
+            "theme": cookies.get("theme"),
+            "dark_theme_url": url_for("static", filename="/CSS/dark.css"),
+            "light_theme_url": url_for("static", filename="/CSS/light.css"),
+            "theme_setter_url": url_for("static", filename="/JavaScript/setTheme.js")        
+            }
         if session.get("id"):
             favorites = session.get("favorites")
             # Ajouter une clé qui permet d'identifier les favoris
             arguments["donnee"]["results"] = mapping(lambda s: {**s, "favorite": True} if int(s["stationcode"]) in tuple(favorites) else {**s, "favorite": False}, donnee["results"])
             return render_template("guest.html.jinja", **arguments , logged_in = True)
         return render_template("guest.html.jinja", **arguments , logged_in = False)
+    
     except Exception as e:
         Error.resolve(error_identifier, label, Error.exception, f"{e}")
 
 
 @app.route("/profile")
+
 def profile():
     label = "PROFILE"
     try:
         id = session.get("id")
+        cookies = Cookies(request)
         if id:
             # Récupérer les données de l'API
             donnee, _ = retrieve_stations()
@@ -176,7 +190,11 @@ def profile():
                 "firstname": session.get("firstname"),
                 "lastname": session.get("lastname"),
                 "mail": session.get("mail"),
-                "favorite_stations": favorite_stations
+                "favorite_stations": favorite_stations,
+                "theme": cookies.get("theme"),
+                "dark_theme_url": url_for("static", filename="/CSS/dark.css"),
+                "light_theme_url": url_for("static", filename="/CSS/light.css"),
+                "theme_setter_url": url_for("static", filename="/JavaScript/setTheme.js")
             }
             return render_template("profile.html.jinja", **arguments)
         return redirect(url_for("login"))
