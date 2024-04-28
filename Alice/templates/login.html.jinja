@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/CSS/dark.css">
+    <title>Connexion</title>
+    {% if theme == "dark" %}
+    <link rel="stylesheet" href="{{ dark_theme_url }}" />
+    {% else %}
+    <link rel="stylesheet" href="{{ light_theme_url }}" />
+    {% endif %}
+</head>
+<body>
+{% include 'headers/guest.html' %}
+
+    {% if error %}
+    <div class="error">
+        <p id="error">{{error}}</p>
+    </div>
+    {% endif %}
+
+    <h1>Connectez-vous à votre compte <span>Vuelib</span></h1>
+    <form method="POST">
+<div class="form_infos">
+        <label for="mail">Adresse mail <span>*</span></label><br>
+        {% if mail %}
+        <input type="text" id="mail" name="mail" placeholder="Votre mail" value="{{ mail }}"/><br><br>
+        {% else %}
+        <input type="text" id="mail" name="mail" placeholder="Votre mail"/><br><br>
+        {% endif %}
+        <label for="password">Mot de passe <span>*</span></label><br>
+        <input type="password" id="password" name="password" placeholder="Votre mot de passe" /><br><br>
+
+        <button>Se connecter</button><br><br>
+
+        {% if mail %}
+        <input type="checkbox" id="remember" name="remember" checked>
+        {% else %}
+        <input type="checkbox" id="remember" name="remember">
+        {% endif %}
+
+        <label for="remember">Enregistrer l'adresse mail </label>
+    <a href="/signup">Inscrivez-vous</a>
+</div>
+    </form>
+
+    {% include 'headers/footer.html' %}
+</body>
+</html>

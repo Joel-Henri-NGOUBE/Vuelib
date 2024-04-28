@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon profil</title>
+
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        #map { height: 600px; width: 50%; }
+    </style>
+    
+    {% if theme == "dark" %}
+    <link rel="stylesheet" href="{{ dark_theme_url }}" />
+    {% else %}
+    <link rel="stylesheet" href="{{ light_theme_url }}" />
+    {% endif %}
+    
+</head>
+<body>
+{% include 'headers/logged.html' %}
+
+<div class="infos_user">
+    <div id="map"></div>
+
+    <div class="user">
+    <h1>Bienvenue <span>{{ firstname }} </span>!</h1>
+    <div class="user_container">
+    <h3>Mes informations :</h3>
+    <ul>
+        <li><strong>Prénom :</strong> {{ firstname }}</li>
+        {% if lastname %}
+        <li><strong>Nom :</strong> {{ lastname }}</li>
+        {% endif %}
+        <li><strong>Adresse mail :</strong> {{ mail }}</li>
+    </ul>
+    </div>
+<div class="list favorite_stations">
+    <div class="favorite_title">
+    
+    <h3>Mes stations favorites :</h3>
+    
+    <a href="/guest">Voir la map</a>
+    </div>
+    <ul>
+        {% for station in favorite_stations %}
+             <li>
+                {% if station['title'] %}
+                <span>{{ station['title'] }}</span><br>
+                {% endif %}
+                 <strong><span>{{ station['name'] }}</span></strong> <br><br>
+                 <strong>Capacité :</strong> {{ station['capacity'] }}<br>
+                 <strong>Nombre d'emplacements disponibles :</strong> {{ station['numdocksavailable'] }}<br>
+                 <strong>Nombre de vélos disponibles :</strong> {{ station['numbikesavailable'] }}<br>
+                 <strong>Vélos mécaniques :</strong> {{ station['mechanical'] }}<br>
+                 <strong>Vélos électriques :</strong> {{ station['ebike'] }}<br><br>
+                 {% if station['title'] %}
+                 <button onclick="commitUpdateFavoriteStation('{{ station['stationcode'] }}','{{station['title']}}')">Modifier le favori</button>
+                 {% else %}
+                 <button onclick="commitUpdateFavoriteStation('{{ station['stationcode'] }}')">Modifier le favori</button>
+                {% endif %}
+                 <button onclick="removeFavoriteStation('{{ station['stationcode'] }}')">Enlever des favoris</button>
+
+                 {% else %}
+                 <p>Vous n'avez pas de stations favorites</p>
+         {% endfor %}
+     </ul>
+</div>
+    
+    </div>
+</div>
+    {% include 'headers/footer.html' %}
+</body>
+<script src="/static/JavaScript/map_profile.js"></script>
+
+<script> 
+    let data_string = {{data_string}}
+    let data = JSON.parse(JSON.stringify(data_string))
+    map(data)
+    {#console.log()#}
+</script>
+<script src={{ url_for("static", filename="JavaScript/favorites_profile.js")}}></script>
+
+</html>

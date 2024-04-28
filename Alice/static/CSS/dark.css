@@ -1,0 +1,254 @@
+body{
+    margin:0;
+    color: var(--bleu);
+    background-color: var(--bleu-fonce);
+    padding: 0;
+}
+
+:root{
+    --jaune: #C3D350;
+    --jaune-fonce:#4A5214;
+    --bleu: #6c9ed4;
+    --bleu-fonce: #13293D;
+    --gris: #342f2f;
+    --rouge-clair: #F1A7A7 ;
+    --rouge-fonce: #ab0000;
+}
+
+@font-face {
+    font-family: 'PoliceTitre';
+    src: url(/static/CSS/LexendTera-Black.ttf);
+}
+
+@font-face {
+    font-family: 'PoliceContenu';
+    src: url(/static/CSS/Raleway-Light.ttf);
+}
+
+button{
+    font-family: 'PoliceContenu';
+    border: none;
+    padding: 10px;
+    background-color: var(--jaune);
+    color: var(--bleu-fonce);
+    border-radius: 5px;
+}
+
+button:hover{
+    background-color: var(--bleu-fonce);
+    color: var(--jaune);
+}
+
+/* Pour le header et le footer  */
+
+span{
+    color: var(--jaune);
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    background-color: var(--bleu-fonce);
+    color:var(--bleu);
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
+}
+
+.logo {
+    font-family: 'PoliceTitre';
+    font-size: 40px;
+    text-decoration: none;
+    color: var(--jaune);
+}
+
+.navbar {
+    margin-top: 10px;
+}
+
+.navbar a {
+    font-family: 'PoliceContenu';
+    color: var(--bleu);
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.navbar a:hover {
+    color: var(--jaune);
+}
+
+.footer{
+    background-color: var(--bleu-fonce);
+    font-family: 'PoliceContenu';
+    padding: 25px;
+    color: var(--jaune);
+    text-align: center;
+}
+
+/*  Pour La map */
+
+.map-container {
+    position: relative;
+}
+
+/* Pour la page profil */
+
+.infos_user{
+    display: flex;
+    position: relative;
+}
+
+h1{
+    font-family: 'PoliceTitre';
+    color: var(--bleu);
+    text-align: center;
+}
+
+/* Pour les encadrés d'infos des stations */
+
+.list{
+    text-decoration: none;
+    font-family: 'PoliceContenu';
+}
+
+.list li{
+    list-style-type: none;
+    justify-content: center;
+    padding : 20px;
+    background-color: var(--gris);
+    margin-bottom : 10px;
+    color: white;
+    width: 95%;
+    border-radius: 10px;
+}
+
+ul{
+    padding-inline-start: 0px;
+}
+
+.list li span {
+    color: var(--jaune);
+    font-size: 24px;
+}
+
+/* Infos sur le compte */
+
+.user{
+    justify-content: center;
+    list-style-type: none;
+    padding : 20px;
+    margin-bottom : 10px;
+    color: var(--bleu-fonce);
+    width: 50%;
+}
+
+.user_container{
+    justify-content: center;
+    padding : 20px;
+    background-color: var(--jaune);
+    margin-bottom : 10px;
+    color: var(--bleu-fonce);
+    width: 95%;
+    font-family: 'PoliceContenu';
+    border-radius: 10px;
+}
+
+.user_container ul{
+    list-style-type: none;
+}
+
+/* Connexion/Inscription */
+
+form{
+    background-color: var(--gris);
+    justify-content: center;
+    padding: 50px;
+    font-family: 'PoliceContenu';
+    color:var(--bleu);
+}
+
+.user h1 span{
+    color: var(--jaune);
+}
+
+form span{
+    color:var(--jaune);
+    font-size: 20px;
+}
+
+form a {
+ color:var(--jaune);
+ font-family: 'PoliceContenu';
+}
+
+a {
+    color:var(--jaune);
+    font-family: 'PoliceContenu';
+   }
+
+.form_infos{
+    justify-content: center;
+    text-align: center;
+    font-family: 'PoliceContenu';
+}
+
+input{
+    height: 30px;
+    width: 400px;
+    border: none;
+    border-radius: 5px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #d3d3d3; 
+    font-style: italic; 
+    font-size: 14px;
+    font-family: 'PoliceContenu';
+}
+
+/* Messages des actions */
+
+.success{
+    background-color: var(--jaune);
+    padding: 5px;
+}
+.success p{
+    text-align: center;
+    color: var(--jaune-fonce);
+    font-family: 'PoliceContenu';
+}
+
+.error{
+    background-color: var(--rouge-clair);
+    padding: 5px;
+}
+
+.error p{
+    text-align: center;
+    color :var(--rouge-fonce);
+    font-family: 'PoliceContenu';
+}
+
+h3{
+    color:var(--bleu);
+}
+
+p{
+    color : white;
+}
+
+.favorite_title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.guest{
+    margin-left: 30px;
+}
+
+.leaflet-popup-content{
+    font-family: 'PoliceContenu';
+}
