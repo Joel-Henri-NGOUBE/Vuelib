@@ -20,11 +20,7 @@ def retrieve_stations():
         length = length - client.max_length
 
     stations = json.loads(json.loads(result))
-    # print(stations)
-    # print("\n")
 
     client.close()
     
     return (stations, result)
-
-# retrieve_stations()

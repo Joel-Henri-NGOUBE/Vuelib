@@ -27,3 +27,7 @@ def filtering(lamba_function, to_filter: list):
 
 def mapping(lamba_function, to_filter: list):
     return list(map(lamba_function, to_filter))
+
+def add_title(station):
+    station[f"{station["station_code"]}"] = station["title"]
+    return station

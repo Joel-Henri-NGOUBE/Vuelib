@@ -14,5 +14,4 @@ def get_results():
     connection.close()
     
     return results
-# print(json.loads(get_results()))
     
