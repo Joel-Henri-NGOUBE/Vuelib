@@ -13,8 +13,11 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <style>
-        #map { height: 600px; }
+        #map { height: 600px; z-index: 0;}
     </style>
+
+    <link rel="stylesheet" href="/static/CSS/dark.css">
+
 </head>
 
 <body>
@@ -26,17 +29,19 @@
 
     <h1>Découvrez {{max_number_stations}} des {{ donnee['total_count'] }} stations de velib à Paris</h1>
 
-    <div id="map"></div>
-    <div class="list">
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+    <div class="list guest">
         <ul>
             {% for station in donnee['results'] %}
                  <li>
-                     <strong>Name:</strong> {{ station['name'] }}<br>
-                     <strong>Capacity:</strong> {{ station['capacity'] }}<br>
-                     <strong>Number of Docks Available:</strong> {{ station['numdocksavailable'] }}<br>
-                     <strong>Number of Bikes Available:</strong> {{ station['numbikesavailable'] }}<br>
-                     <strong>Mechanical:</strong> {{ station['mechanical'] }}<br>
-                     <strong>Ebike:</strong> {{ station['ebike'] }}<br>
+                     <strong><span>{{ station['name'] }}</span></strong> <br><br>
+                     <strong>Capacité :</strong> {{ station['capacity'] }}<br>
+                     <strong>Nombre de places disponibles :</strong> {{ station['numdocksavailable'] }}<br>
+                     <strong>Nombre de vélos disponibles :</strong> {{ station['numbikesavailable'] }}<br>
+                     <strong>Vélos mécaniques :</strong> {{ station['mechanical'] }}<br>
+                     <strong>Vélos électriques :</strong> {{ station['ebike'] }}<br><br>
                      {% if logged_in %}
                      {% if station['favorite'] %}
                      <button onclick="removeFavoriteStation('{{ station['stationcode'] }}')">Enlever des favoris</button>
@@ -44,9 +49,11 @@
                      <button onclick="addFavoriteStation('{{ station['stationcode'] }}')">Ajouter aux favoris</button>
                      {% endif %}
                      {% endif %}
+                </li>
              {% endfor %}
          </ul>
     </div>
+    {% include 'headers/footer.html' %}
 </body>
 
 <script src="/static/JavaScript/map_guest.js"></script>

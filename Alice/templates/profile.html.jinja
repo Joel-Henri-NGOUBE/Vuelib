@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Mon profil</title>
 
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -12,35 +12,54 @@
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <style>
-        #map { height: 600px; }
+        #map { height: 600px; width: 50%; }
     </style>
+    <link rel="stylesheet" href="/static/CSS/dark.css">
 </head>
 <body>
-    <h1>Bienvenue {{ firstname }} </h1>
-    <ul>
-        <li><strong>First Name:</strong> {{ firstname }}</li>
-        <li><strong>Last Name:</strong> {{ lastname }}</li>
-        <li><strong>Email:</strong> {{ mail }}</li>
-    </ul>
+{% include 'headers/logged.html' %}
 
-
+<div class="infos_user">
     <div id="map"></div>
+
+    <div class="user">
+    <h1>Bienvenue {{ firstname }} !</h1>
+    <div class="user_container">
+    <h3>Mes informations :</h3>
+    <ul>
+        <li><strong>Prénom :</strong> {{ firstname }}</li>
+        <li><strong>Nom :</strong> {{ lastname }}</li>
+        <li><strong>Adresse mail :</strong> {{ mail }}</li>
+    </ul>
+    </div>
+<div class="list favorite_stations">
+    <div class="favorite_title">
+    
+    <h3>Mes stations favorites :</h3>
+    
+    <a href="/guest">Voir la map</a>
+    </div>
     <ul>
         {% for station in favorite_stations %}
              <li>
-                 <strong>Name:</strong> {{ station['name'] }}<br>
-                 <strong>Capacity:</strong> {{ station['capacity'] }}<br>
-                 <strong>Number of Docks Available:</strong> {{ station['numdocksavailable'] }}<br>
-                 <strong>Number of Bikes Available:</strong> {{ station['numbikesavailable'] }}<br>
-                 <strong>Mechanical:</strong> {{ station['mechanical'] }}<br>
-                 <strong>Ebike:</strong> {{ station['ebike'] }}<br>
+                 <strong><span>{{ station['name'] }}</span></strong> <br><br>
+                 <strong>Capacité :</strong> {{ station['capacity'] }}<br>
+                 <strong>Nombre d'emplacements disponibles :</strong> {{ station['numdocksavailable'] }}<br>
+                 <strong>Nombre de vélos disponibles :</strong> {{ station['numbikesavailable'] }}<br>
+                 <strong>Vélos mécaniques :</strong> {{ station['mechanical'] }}<br>
+                 <strong>Vélos électriques :</strong> {{ station['ebike'] }}<br><br>
                  <button onclick="updateFavoriteStation('{{ station['stationcode'] }}')">Modifier le favori</button>
                  <button onclick="removeFavoriteStation('{{ station['stationcode'] }}')">Enlever des favoris</button>
+
+                 {% else %}
+                 <p>Vous n'avez pas de stations favorites</p>
          {% endfor %}
      </ul>
-    {#<a href="/favorites">Voir mes stations favorites</a>#}
-    {#<a href="/favorites/add">Ajouter une nouvelle station favorite</a>#}
+</div>
     
+    </div>
+</div>
+    {% include 'headers/footer.html' %}
 </body>
 <script src="/static/JavaScript/map_profile.js"></script>
 

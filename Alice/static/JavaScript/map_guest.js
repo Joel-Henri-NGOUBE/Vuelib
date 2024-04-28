@@ -59,10 +59,10 @@ function map(donnee){
             <span style="color:#071F32 "><b>${result.name}</b></span>
             <br> <i>${result.nom_arrondissement_communes}</i>
             <hr> <b>Capacité: </b>${result.capacity}
-            <br> <b>Emplacement disponibles : </b>${result.numdocksavailable} 
-            <br> <b>Vélos disponible : </b>${result.numbikesavailable}
-            <br> <b>Vélos mécanique : </b>${result.mechanical}
-            <br> <b>Vélos électrique : </b>${result.ebike}
+            <br> <b>Emplacements disponibles : </b>${result.numdocksavailable} 
+            <br> <b>Vélos disponibles : </b>${result.numbikesavailable}
+            <br> <b>Vélos mécaniques : </b>${result.mechanical}
+            <br> <b>Vélos électriques : </b>${result.ebike}
             `)
             L.circle([result.coordonnees_geo.lat, result.coordonnees_geo.lon], {radius: 1}).addTo(map);
         })
