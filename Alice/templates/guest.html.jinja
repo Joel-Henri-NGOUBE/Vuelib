@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réserver un vélo</title>
+    {% if theme == "dark" %}
+    <link rel="stylesheet" href="{{ dark_theme_url }}" />
+    {% else %}
+    <link rel="stylesheet" href="{{ light_theme_url }}" />
+    {% endif %}
+    {# link rel="./guest.css" #}
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -25,6 +31,12 @@
         {% include 'headers/logged.html' %}
     {% else %}
         {% include 'headers/guest.html' %}
+    {% endif %}
+
+    {% if theme == "dark" %}
+        <button id="theme">Sombre</button>
+    {% else %}
+        <button id="theme">Clair</button>
     {% endif %}
 
     <h1>Découvrez {{max_number_stations}} des {{ donnee['total_count'] }} stations de velib à Paris</h1>
@@ -55,7 +67,15 @@
     </div>
     {% include 'headers/footer.html' %}
 </body>
+<script src="{{ theme_setter_url }}"></script>
+<script>
+    console.dir(document.querySelector("input[type='checkbox']"))
+    console.dir(document)
 
+document.querySelector("#theme").addEventListener("click", () => {
+        setTheme("{{ light_theme_url }}", "{{ dark_theme_url }}")
+} )
+</script>
 <script src="/static/JavaScript/map_guest.js"></script>
 
 <script> 
@@ -64,6 +84,7 @@
     map(data)
     {#console.log()#}
 </script>
+
 {% if logged_in %}
 <script src={{ url_for("static", filename="Javascript/favorites_guest.js")}}></script>
 {% endif %}

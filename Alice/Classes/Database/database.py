@@ -27,16 +27,6 @@ class Database:
         if params is None: self._curseur.execute(sql_request)
         else: self._curseur.execute(sql_request, params)
     
-    # def _dictify(a, self,data, dataCell):
-    #     i = 0
-    #     # print(a_result)
-    #     for index in self._curseur.description:
-    #         # print(i)
-    #         dataCell[str(index[0])] = a[i]
-    #         i += 1
-    #     data.append(dataCell)
-    #     return data
-    
     def _get_data(self, sql_request: str, params: tuple|None = None):
         self._check_params(sql_request, params)
         result = self._curseur.fetchall()
@@ -92,19 +82,6 @@ class Database:
         
     def close(self):
         self._close_connection()
-        
-    # def old_function():
-        # data = list()
-        # dataCell = dict()
-        # # for a_result in result:
-        # #     i = 0
-        # #     print(a_result)
-        # #     for index in self._curseur.description:
-        # #         # print(i)
-        # #         dataCell[str(index[0])] = a_result[i]
-        # #         i += 1
-        # #     data.append(dataCell)
-        # data2 = map(self._dictify(a,self, data, dataCell), result)
 
 
 

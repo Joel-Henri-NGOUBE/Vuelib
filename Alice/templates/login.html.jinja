@@ -10,7 +10,6 @@
     {% else %}
     <link rel="stylesheet" href="{{ light_theme_url }}" />
     {% endif %}
-    {# link rel="./login.css" #}
 </head>
 <body>
 {% include 'headers/guest.html' %}
@@ -54,14 +53,4 @@
 
     {% include 'headers/footer.html' %}
 </body>
-
-<script src="{{ theme_setter_url }}"></script>
-<script>
-    console.dir(document.querySelector("input[type='checkbox']"))
-    console.dir(document)
-
-document.querySelector("#theme").addEventListener("click", () => {
-        setTheme("{{ light_theme_url }}", "{{ dark_theme_url }}")
-} )
-</script>
 </html>

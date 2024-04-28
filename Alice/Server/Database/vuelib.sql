@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 16 avr. 2024 à 02:36
+-- Généré le : dim. 28 avr. 2024 à 15:53
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.1.12
 
@@ -20,7 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `vuelib`
 --
+CREATE DATABASE IF NOT EXITS "vuelib";
 
+USE "vuelib";
 -- --------------------------------------------------------
 
 --
@@ -30,7 +32,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `favorites` (
   `id_favorite` int(5) NOT NULL,
   `id_user` int(5) DEFAULT NULL,
-  `station_code` int(20) DEFAULT NULL
+  `station_code` int(20) DEFAULT NULL,
+  `title` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -46,13 +49,6 @@ CREATE TABLE `users` (
   `mail` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `users`
---
-
-INSERT INTO `users` (`id_user`, `firstname`, `lastname`, `mail`, `password`) VALUES
-(1, 'a', 'a', 'bonjour', '2cb4b1431b84ec15d35ed83bb927e27e8967d75f4bcd9cc4b25c8d879ae23e18');
 
 --
 -- Index pour les tables déchargées
@@ -85,7 +81,7 @@ ALTER TABLE `favorites`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
