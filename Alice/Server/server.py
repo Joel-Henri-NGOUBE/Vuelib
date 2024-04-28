@@ -21,6 +21,8 @@ session = Session()
 
 error_identifier = "[ERREUR - SERVEUR]:"
 
+dark_mode = True
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     # # Exemple d'instanciaton des classes utiles
@@ -99,13 +101,16 @@ def login():
     return redirect(url_for("profile"))
     
 @app.route("/signup", methods=["GET", "POST"])
+
 def signup():
     if not session.get("id"):
         label = "SIGNUP"
         try:
             db = Database()
+            cookies = Cookies(request)
             if request.method == "GET":
-                return render_template("signup.html.jinja")
+                return render_template("signup.html.jinja", theme = cookies.get("theme"))
+            
             if request.method == "POST":
                 form = request.form
                 form_length = len(form)
@@ -144,13 +149,19 @@ def landing():
     return redirect(url_for("guest"))
 
 @app.route("/guest")
+
 def guest():
+    cookies = Cookies(request)
     donnee, data_string = retrieve_stations()
     # print(donnee["results"][-1])
     arguments = {
         "donnee": donnee,
         "data_string": data_string,
-        "max_number_stations": len(donnee["results"])
+        "max_number_stations": len(donnee["results"]),
+        "theme": cookies.get("theme"),
+        "dark_theme_url": url_for("static", filename="/CSS/dark.css"),
+        "light_theme_url": url_for("static", filename="/CSS/light.css"),
+        "theme_setter_url": url_for("static", filename="/JavaScript/setTheme.js")        
     }
     # db = Database()
     if session.get("id"):
@@ -158,11 +169,14 @@ def guest():
         arguments["donnee"]["results"] = mapping(lambda s: {**s, "favorite": True} if int(s["stationcode"]) in tuple(favorites) else {**s, "favorite": False}, donnee["results"])
         return render_template("guest.html.jinja", **arguments , logged_in = True)
     return render_template("guest.html.jinja", **arguments , logged_in = False)
+    
 
 
 @app.route("/profile")
+
 def profile():
     id = session.get("id")
+    cookies = Cookies(request)
     if id:
         donnee, _ = retrieve_stations()
         favorites = session.get("favorites")
@@ -172,7 +186,11 @@ def profile():
             "firstname": session.get("firstname"),
             "lastname": session.get("lastname"),
             "mail": session.get("mail"),
-            "favorite_stations": favorite_stations
+            "favorite_stations": favorite_stations,
+            "theme": cookies.get("theme"),
+            "dark_theme_url": url_for("static", filename="/CSS/dark.css"),
+            "light_theme_url": url_for("static", filename="/CSS/light.css"),
+            "theme_setter_url": url_for("static", filename="/JavaScript/setTheme.js")
         }
         # if len(favorites)
         # return f"Favorites <a href='logout'>Se déconnecter</a> {session.get("favorites")}"

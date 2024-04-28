@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    {% if theme == "dark" %}
+    <link rel="stylesheet" href="{{ dark_theme_url }}" />
+    {% else %}
+    <link rel="stylesheet" href="{{ light_theme_url }}" />
+    {% endif %}
+    {# link rel="./signup.css" #}
 </head>
 <body>
 {% include 'headers/guest.html' %}
@@ -36,5 +42,6 @@
 
     </form>
     <a href="/login">Connectez-vous</a>
+
 </body>
 </html>
