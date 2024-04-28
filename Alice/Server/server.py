@@ -95,8 +95,14 @@ def signup():
         try:
             db = Database()
             cookies = Cookies(request)
+            arguments = {
+                "theme": cookies.get("theme"),
+                "dark_theme_url": url_for("static", filename="/CSS/dark.css"),
+                "light_theme_url": url_for("static", filename="/CSS/light.css"),
+                "theme_setter_url": url_for("static", filename="/JavaScript/setTheme.js") 
+            }
             if request.method == "GET":
-                return render_template("signup.html.jinja", theme = cookies.get("theme"))
+                return render_template("signup.html.jinja", **arguments)
             
             if request.method == "POST":
                 # Récupérer les données de formulaires
@@ -160,13 +166,11 @@ def guest():
             arguments["donnee"]["results"] = mapping(lambda s: {**s, "favorite": True} if int(s["stationcode"]) in tuple(favorites) else {**s, "favorite": False}, donnee["results"])
             return render_template("guest.html.jinja", **arguments , logged_in = True)
         return render_template("guest.html.jinja", **arguments , logged_in = False)
-    
     except Exception as e:
         Error.resolve(error_identifier, label, Error.exception, f"{e}")
 
 
 @app.route("/profile")
-
 def profile():
     label = "PROFILE"
     try:
