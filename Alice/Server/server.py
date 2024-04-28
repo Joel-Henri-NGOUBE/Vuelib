@@ -217,15 +217,13 @@ def favorites():
             if request.content_type == "application/json":
                 payload = request.json
                 payload_length = len(payload)
-                print(payload_length)
                 if payload_length:
                     if payload_length == 2:
                         action, station_code = values(payload)
                 else: abort(400)
-            if request.content_type == "application/x-www-form-urlencoded":
+            elif request.content_type == "application/x-www-form-urlencoded":
                 form = request.form
                 form_length = len(form)
-                print(form_length)
                 if form_length:
                     if form_length == 2:
                         title, station_code = values(form)

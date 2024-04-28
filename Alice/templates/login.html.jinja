@@ -49,14 +49,4 @@
 
     <a href="/signup">Inscrivez-vous</a>
 </body>
-
-<script src="{{ theme_setter_url }}"></script>
-<script>
-    console.dir(document.querySelector("input[type='checkbox']"))
-    console.dir(document)
-
-document.querySelector("#theme").addEventListener("click", () => {
-        setTheme("{{ light_theme_url }}", "{{ dark_theme_url }}")
-} )
-</script>
 </html>
