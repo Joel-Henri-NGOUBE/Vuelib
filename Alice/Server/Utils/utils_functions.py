@@ -4,14 +4,14 @@ from flask import render_template
 def values(dictionnary: dict):
     return tuple(dictionnary.values())
 
-def render_error_login(error):
-    return render_template("login.html.jinja", error = error)
+def render_error_login(**args):
+    return render_template("login.html.jinja", **args)
 
-def render_error_signup(error):
-    return render_template("signup.html.jinja", error = error)
+def render_error_signup(**args):
+    return render_template("signup.html.jinja", **args)
 
-def render_success_signup(message):
-    return render_template("signup.html.jinja", message = message)
+def render_success_signup(**args):
+    return render_template("signup.html.jinja", **args)
 
 def render_success_favorites(message):
     return {"Status": "success", "Message": message}

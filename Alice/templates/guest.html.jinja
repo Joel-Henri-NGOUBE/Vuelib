@@ -22,8 +22,6 @@
         #map { height: 600px; z-index: 0;}
     </style>
 
-    <link rel="stylesheet" href="/static/CSS/dark.css">
-
 </head>
 
 <body>
@@ -81,7 +79,13 @@ document.querySelector("#theme").addEventListener("click", () => {
 <script> 
     let data_string = {{data_string}}
     let data = JSON.parse(data_string)
-    map(data)
+    let logged_in = "{{logged_in}}"
+    if (logged_in === "False"){
+        logged_in = false 
+    }else {
+        logged_in = true
+    }
+    map(data, logged_in)
     {#console.log()#}
 </script>
 

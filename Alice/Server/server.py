@@ -29,14 +29,14 @@ def login():
         label = "LOGIN"
         db = Database()
         cookies = Cookies(request)
-        if request.method == "GET":
-            arguments = {
+        arguments = {
                 "mail": cookies.get("mail"),
                 "theme": cookies.get("theme"),
                 "dark_theme_url": url_for("static", filename="/CSS/dark.css"),
                 "light_theme_url": url_for("static", filename="/CSS/light.css"),
                 "theme_setter_url": url_for("static", filename="/JavaScript/setTheme.js")            
             }
+        if request.method == "GET":
             return render_template("login.html.jinja", **arguments)
         if request.method == "POST":
             form = request.form
@@ -79,12 +79,15 @@ def login():
                                 if cookies.get("mail"):
                                     cookies.pop("mail", res)
                             return res
-                        return render_error_login( "Le mot de passe renseigné ne correspond pas")
+                        arguments["error"] = "Le mot de passe renseigné ne correspond pas"
+                        return render_error_login(**arguments)
                     except Exception as err: 
                         Error.resolve(error_identifier, label, Error.exception, f"{err}")    
                 db.close()
-                return render_error_login("Aucun utilisateur ne possède l'adresse mail renseignée.")
-            return render_error_login("L'un des champs renseignés est vide.")
+                arguments["error"] = "Aucun utilisateur ne possède l'adresse mail renseignée."
+                return render_error_login(**arguments)
+            arguments["error"] = "L'un des champs renseignés est vide."
+            return render_error_login(**arguments)
     return redirect(url_for("profile"))
     
 @app.route("/signup", methods=["GET", "POST"])
@@ -121,15 +124,18 @@ def signup():
                     user = db.select("SELECT * FROM users WHERE mail = ?", (mail,))
                     if len(user):
                         db.close()
-                        return render_error_signup("Un utilisateur possède déjà un espace rattaché à cette adresse mail")
+                        arguments["error"] = "Un utilisateur possède déjà un espace rattaché à cette adresse mail"
+                        return render_error_signup(**arguments)
                     password = hashing(password)
                     # Créer un nouvel utilisateur
                     if not lastname:
                         db.mutate_and_close("INSERT INTO users (firstname, lastname, mail, password) VALUES (?, NULL,?,?)", (firstname, mail, password))
                     else:
                         db.mutate_and_close("INSERT INTO users (firstname, lastname, mail, password) VALUES (?,?,?,?)", (firstname, lastname, mail, password))
-                    return render_success_signup("La création de votre compte utilisateur a réussi")
-                return render_error_signup("L'un des champs obligatoires est vide")
+                    arguments["message"] = "La création de votre compte utilisateur a réussi"
+                    return render_success_signup(**arguments)
+                arguments["error"] = "L'un des champs obligatoires est vide"
+                return render_error_signup(**arguments)
         except Exception as err: 
             Error.resolve(error_identifier, label, Error.exception, f"{err}")
     return redirect(url_for("profile"))
@@ -181,8 +187,8 @@ def profile():
             donnee, _ = retrieve_stations()
             station_codes = session.get("favorites")
             # Ne garder que les stations favorites sur le profil
-            data_string = json.dumps(favorite_stations)
             favorite_stations = filtering(lambda s: int(s["stationcode"]) in tuple(station_codes), donnee["results"])
+            data_string = json.dumps(favorite_stations)
             favorites = Req.get_favorite_station(id)
             # Ajouter le titre de la station si elle en a un à la variable qui contient les stations favorites
             favorites = mapping(lambda s: add_title(s), favorites)
@@ -190,7 +196,6 @@ def profile():
                 for favorite in favorites:
                     if int(station["stationcode"]) == int(favorite["station_code"]):
                         station["title"] = favorite[f"{favorite["station_code"]}"]
-                        print(f"{station["title"]} = {favorite[f"{favorite["station_code"]}"]}")
             arguments = {
                 "firstname": session.get("firstname"),
                 "lastname": session.get("lastname"),

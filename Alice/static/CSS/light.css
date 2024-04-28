@@ -85,7 +85,13 @@ span{
     color: var(--jaune);
     text-align: center;
 }
+.footer p{
+    color: var(--jaune);
+}
 
+.user h1 span{
+    color: var(--jaune);
+}
 /*  Pour La map */
 
 .map-container {
@@ -225,6 +231,11 @@ p{
     color : var(--bleu);
 }
 
+.favorite_title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .guest{
     margin-left: 30px;
@@ -232,4 +243,8 @@ p{
 
 .leaflet-popup-content{
     font-family: 'PoliceContenu';
+}
+
+.modify_station{
+    padding: 20px;
 }

@@ -1,4 +1,4 @@
-function map(donnee){
+function map(donnee,logged_in){
 
     let donnees = donnee
     
@@ -52,20 +52,38 @@ function map(donnee){
         // console.log(donnee.results[0].coordonnees_geo.lat)
         // console.log(donnee.results[0].coordonnees_geo.lon)
 
-        donnee.results.map((result)=>{
-            L.marker([result.coordonnees_geo.lat, result.coordonnees_geo.lon]).addTo(map)
-            // .bindPopup(<p>result.name</p> + '<br>'+ result.capacity)
-            .bindPopup(`
-            <span style="color:#071F32 "><b>${result.name}</b></span>
-            <br> <i>${result.nom_arrondissement_communes}</i>
-            <hr> <b>Capacité: </b>${result.capacity}
-            <br> <b>Emplacements disponibles : </b>${result.numdocksavailable} 
-            <br> <b>Vélos disponibles : </b>${result.numbikesavailable}
-            <br> <b>Vélos mécaniques : </b>${result.mechanical}
-            <br> <b>Vélos électriques : </b>${result.ebike}
-            `)
-            L.circle([result.coordonnees_geo.lat, result.coordonnees_geo.lon], {radius: 1}).addTo(map);
-        })
+        if (logged_in){
+            donnee.results.map((result)=>{
+                L.marker([result.coordonnees_geo.lat, result.coordonnees_geo.lon]).addTo(map)
+                // .bindPopup(<p>result.name</p> + '<br>'+ result.capacity)
+                .bindPopup(`
+                <span style="color:#071F32 "><b>${result.name}</b></span>
+                <br> <i>${result.nom_arrondissement_communes}</i>
+                <hr> <b>Capacité: </b>${result.capacity}
+                <br> <b>Emplacements disponibles : </b>${result.numdocksavailable} 
+                <br> <b>Vélos disponibles : </b>${result.numbikesavailable}
+                <br> <b>Vélos mécaniques : </b>${result.mechanical}
+                <br> <b>Vélos électriques : </b>${result.ebike}
+                <br> <button onclick="addFavoriteStation('${result.stationcode}')">Ajouter aux favoris</button>
+                `)
+                L.circle([result.coordonnees_geo.lat, result.coordonnees_geo.lon], {radius: 1}).addTo(map);
+            })
+        }else{
+            donnee.results.map((result)=>{
+                L.marker([result.coordonnees_geo.lat, result.coordonnees_geo.lon]).addTo(map)
+                // .bindPopup(<p>result.name</p> + '<br>'+ result.capacity)
+                .bindPopup(`
+                <span style="color:#071F32 "><b>${result.name}</b></span>
+                <br> <i>${result.nom_arrondissement_communes}</i>
+                <hr> <b>Capacité: </b>${result.capacity}
+                <br> <b>Emplacements disponibles : </b>${result.numdocksavailable} 
+                <br> <b>Vélos disponibles : </b>${result.numbikesavailable}
+                <br> <b>Vélos mécaniques : </b>${result.mechanical}
+                <br> <b>Vélos électriques : </b>${result.ebike}
+                `)
+                L.circle([result.coordonnees_geo.lat, result.coordonnees_geo.lon], {radius: 1}).addTo(map);
+            })
+        }
         
 }
 // coordonnees_geo.lat 

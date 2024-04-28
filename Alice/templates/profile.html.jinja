@@ -29,12 +29,14 @@
     <div id="map"></div>
 
     <div class="user">
-    <h1>Bienvenue {{ firstname }} !</h1>
+    <h1>Bienvenue <span>{{ firstname }} </span>!</h1>
     <div class="user_container">
     <h3>Mes informations :</h3>
     <ul>
         <li><strong>Prénom :</strong> {{ firstname }}</li>
+        {% if lastname %}
         <li><strong>Nom :</strong> {{ lastname }}</li>
+        {% endif %}
         <li><strong>Adresse mail :</strong> {{ mail }}</li>
     </ul>
     </div>
@@ -49,7 +51,7 @@
         {% for station in favorite_stations %}
              <li>
                 {% if station['title'] %}
-                <p>{{ station['title'] }}</p>
+                <span>{{ station['title'] }}</span><br>
                 {% endif %}
                  <strong><span>{{ station['name'] }}</span></strong> <br><br>
                  <strong>Capacité :</strong> {{ station['capacity'] }}<br>
