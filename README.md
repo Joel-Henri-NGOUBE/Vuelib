@@ -1,5 +1,3 @@
-"# Vuelib" 
-
 # VUELIB
 
 VUELIB est une application open source développée en Python pour faciliter les déplacements en vélo dans la ville de Paris en utilisant les informations des stations Vélib'.
@@ -12,47 +10,41 @@ VUELIB est une application open source développée en Python pour faciliter les
 
 - Consultation des informations en temps réel sur les stations Vélib' (nombre de vélos disponibles, nombre de places disponibles).
 
-- Recherche de stations à proximité ou par adresse.
+- Recherche de stations à proximité.
 
-- Ajouter vos stations préféré en favoris 
-
-## Installation
-
-- Clonez le dépôt depuis GitHub :
-
-`git clone https://github.com/Joel-Henri-NGOUBE/Vuelib.git`
-
-- Impoter la base de donnée :
-
-- Créer une nouvelle base de donnée vuelib sur MySQL
-
-- Aller dans le fichier /Alice/Server/Database/ et importer le fichier vuelib.sql
-
+- Ajouter vos stations préférées en favoris.
 
 ## Configuration
 
-Installer le connecteur C de MariaDB en choisissant le OS MS Windows via l'adresse https://mariadb.com/downloads/connectors/.
-
---Installer MARIADB--
-Exécuter la commande `pip install mariadb`
-
---Installer requests--
-Exécuter la commande `pip install requests`
-
---Installer FLASK--
-Exécuter la commande `pip install flask`
+- Importer la base de donnée depuis `/Alice/Server/Database/`.
+  
+- Activer les ports de MySQL et Apache sur XAMPP (Si vous n'avez pas de configuration particulière au préalable).
+  
+- Installer préalablement le connecteur C de MariaDB en choisissant le OS MS Windows via l'adresse https://mariadb.com/downloads/connectors/.
 
 -- Installer virtualenv --
-Ppour créer un environnement virtuel avec la commande `python -m pip install virtualenv`
+- Installer le CLI de virtualenv `python -m pip install virtualenv`.
 
--Dans le serveur Alice, créer l'environnement virtuel en faisant `python -m venv .venv` 
+- Créer un environnement virtuel avec la commande `python -m venv .venv` depuis `/Alice/`.
 
-- Se déplacer vers l'environnement virtuel grâce à la commande `./.venv/Scripts/Activate.ps1`
+## Installation
 
-- Lancer le serveur Alice : 
-`flask --app ./Server/server.py run`
+- Se déplacer dans `Alice` en faisant `cd Alice`.
+
+- Se déplacer vers l'environnement virtuel grâce à la commande `./.venv/Scripts/Activate.ps1`.
+  
+--Installer MARIADB--
+Exécuter la commande `pip install mariadb`.
+
+--Installer FLASK--
+Exécuter la commande `pip install flask`.
+
+## Lancement du projet:
+
+- Lancer le serveur Alice :
+`flask --app ./Server/server.py run` (Depuis `/Alice/`).
 
 - Lancer le serveur Bob:
-`python ./Bob/Server/server.py depuis /Vuelib/`
+`python ./Bob/Server/server.py` (Depuis `/Vuelib/`).
 
- Vous pouvez maintenant accéder à l'application sur votre navigateur à l'adresse http indiquer par Alice. 
+Vous pouvez maintenant accéder à l'application sur votre navigateur à l'adresse http indiquée par Alice. 

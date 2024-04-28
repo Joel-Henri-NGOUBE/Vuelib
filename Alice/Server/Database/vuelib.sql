@@ -20,7 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `vuelib`
 --
+CREATE DATABASE IF NOT EXITS "vuelib";
 
+USE "vuelib";
 -- --------------------------------------------------------
 
 --
